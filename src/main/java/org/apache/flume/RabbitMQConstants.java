@@ -35,5 +35,6 @@ public class RabbitMQConstants {
     public final static String CONFIG_CONNECTIONTIMEOUT="connectiontimeout";
     public final static String CONFIG_EXCHANGENAME="exchangename";
     public final static String CONFIG_QUEUENAME="queuename";
+    public final static String CONFIG_PREFETCHCOUNT="prefetchcount";
     public final static String CONFIG_TOPICS="topics";
 }

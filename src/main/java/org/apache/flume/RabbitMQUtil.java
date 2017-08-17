@@ -66,6 +66,10 @@ public class RabbitMQUtil {
         //Preconditions.checkState(queueName!=null, "No queueName specified.");
     }
     
+    public static int getPreFetchCount(Context context) {
+        return context.getInteger(RabbitMQConstants.CONFIG_PREFETCHCOUNT, 0);
+    }
+
     public static String getExchangeName(Context context){
         return context.getString(RabbitMQConstants.CONFIG_EXCHANGENAME, "");
     }

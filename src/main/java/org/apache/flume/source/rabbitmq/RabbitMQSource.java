@@ -42,6 +42,7 @@ public class RabbitMQSource extends AbstractPollableSource {
     private QueueingConsumer _Consumer;
     private Channel _Channel;
     private String _QueueName;
+    private int _PreFetchCount;
     private String _ExchangeName;
     private String[] _Topics;
       
@@ -71,6 +72,12 @@ public class RabbitMQSource extends AbstractPollableSource {
                 _CounterGroup.incrementAndGet(RabbitMQConstants.COUNTER_NEW_CHANNEL);
                 if(log.isInfoEnabled())log.info(this.getName() + " - Connected to " + _ConnectionFactory.getHost() + ":" + _ConnectionFactory.getPort());
                 _Consumer=null;
+
+                if ( _PreFetchCount > 0 ) {
+                    _Channel.basicQos(_PreFetchCount);
+		    if(log.isDebugEnabled())log.debug(this.getName() + " - PreFetchCount=" + _PreFetchCount);
+                }
+
                 if( StringUtils.isNotEmpty(_ExchangeName) ) {
                     try {
                         //declare an exchange
@@ -161,6 +168,7 @@ public class RabbitMQSource extends AbstractPollableSource {
     protected void doConfigure(Context context) throws FlumeException {
         _ConnectionFactory = RabbitMQUtil.getFactory(context);
         _QueueName = RabbitMQUtil.getQueueName(context);
+	_PreFetchCount = RabbitMQUtil.getPreFetchCount(context);
         _ExchangeName = RabbitMQUtil.getExchangeName(context);
         _Topics = RabbitMQUtil.getTopics(context);
 
